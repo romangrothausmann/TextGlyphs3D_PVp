@@ -14,11 +14,6 @@ public:
   vtkTypeMacro(TextGlyphs3D,vtkPolyDataAlgorithm);
   void PrintSelf(ostream& os, vtkIndent indent);
 
-  /* vtkSetVector3Macro(origin, double); */
-  /* vtkGetVector3Macro(origin, double); */
-  /* vtkSetVector3Macro(normal, double); */
-  /* vtkGetVector3Macro(normal, double); */
-
   vtkSetMacro(TextArrayName, vtkStdString);
   vtkGetMacro(TextArrayName, vtkStdString);
 

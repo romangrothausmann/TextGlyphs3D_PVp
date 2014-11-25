@@ -1,8 +1,11 @@
 //////paraview plugin to render text from array data with z-depth
+//////idea and implementation by Roman Grothausmann
+////
 ////based on ~/vtk/py/textOrigin_01.py 
 ////based on https://github.com/Kitware/VTK/blob/master/Examples/Annotation/Python/textOrigin.py
 
 //01: scale and translation working
+//02: clean-up
 
 
 //todo:
@@ -49,32 +52,6 @@ int TextGlyphs3D::RequestData(
     vtkPolyData *output = vtkPolyData::SafeDownCast(
         outInfo->Get(vtkDataObject::DATA_OBJECT()));
 
-    //vtkStringArray* textArray= dynamic_cast<vtkStringArray*>(input->GetPointData()->GetArray(this->TextArrayName));vtkIntArray::SafeDownCast
-    // std::cerr << this->TextArrayName << std::endl;
-    // input->GetPointData()->Print(std::cerr);
-    // fprintf(stderr, "%s, %d\n", __FILE__,__LINE__);
-    // std::cerr << "GetNumberOfArrays: " << input->GetPointData()->GetNumberOfArrays () << std::endl;
-    // for (int j = 0; j < input->GetPointData()->GetNumberOfArrays (); j ++) 
-    // 	{
-    // 	char *name = 0;
-    // 	if (input->GetPointData()->GetArray(j))
-    // 	    {
-    // 	    name = input->GetPointData()->GetArray(j)->GetName();
-    // 	    std::cerr << name << std::endl;
-    // 	    input->GetPointData()->GetArray(j)->Print(std::cerr);
-    // 	    }
-    // 	else
-    // 	    std::cerr << "Array #: " << j << std::endl;
-    // 	}
-    // std::cerr << input->GetPointData()->GetArrayName(7) << std::endl;
-    // //vtkDataArray* dataArray= input->GetPointData()->GetArray(this->TextArrayName.c_str());
-    //vtkDataArray* dataArray= input->GetPointData()->GetArray("hkl-label");
-    // vtkAbstractArray* dataArray= input->GetPointData()->GetAbstractArray(this->TextArrayName);
-    // fprintf(stderr, "%s, %d\n", __FILE__,__LINE__);
-    // dataArray->Print(std::cerr);
-    // vtkStringArray* textArray= vtkStringArray::SafeDownCast(dataArray);
-    //vtkStringArray* textArray= vtkStringArray::SafeDownCast(input->GetPointData()->GetArray("hkl-label"));
-
     vtkStringArray* textArray= vtkStringArray::SafeDownCast(input->GetPointData()->GetAbstractArray(this->TextArrayName));
 
     if(!textArray){
@@ -85,27 +62,16 @@ int TextGlyphs3D::RequestData(
 
     vtkSmartPointer<vtkVectorText> text3d= vtkSmartPointer<vtkVectorText>::New();
 	
-    // vtkSmartPointer<vtkTransform> tf= vtkSmartPointer<vtkTransform>::New();
-    // tf->Scale(this->Scale, this->Scale, this->Scale);
-    // tf->PostMultiply();	//scale first, then translate
-
     vtkSmartPointer<vtkTransformPolyDataFilter> tff= vtkSmartPointer<vtkTransformPolyDataFilter>::New();
-    // tff->SetTransform(tf);
     tff->SetInputConnection(text3d->GetOutputPort());
 
     vtkSmartPointer<vtkAppendPolyData> append= vtkSmartPointer<vtkAppendPolyData>::New();
 
     for(vtkIdType i= 0; i < input->GetNumberOfPoints(); i++){
-	//std::cerr << textArray->GetValue(i) << std::endl;
 	text3d->SetText(textArray->GetValue(i));
 	vtkSmartPointer<vtkTransform> tf= vtkSmartPointer<vtkTransform>::New();
-	// double p[3];
-	// input->GetPoint(i, p);
-	// fprintf(stderr, "%f, %f, %f\n", p[0], p[1], p[2]);
-	// tf->Translate(p);
 	tf->Translate(input->GetPoint(i));
 	tf->Scale(this->Scale, this->Scale, this->Scale);
-	//tf->PostMultiply();	//scale first, then translate
 	tff->SetTransform(tf);
 	tff->Update();
 
@@ -113,20 +79,6 @@ int TextGlyphs3D::RequestData(
 	outputCopy->ShallowCopy(tff->GetOutput());
 	append->AddInputData(outputCopy);
 	}
-
-
-// textMapper = vtk.vtkPolyDataMapper()
-// textMapper.SetInputConnection(atext.GetOutputPort())
-// textActor = vtk.vtkFollower()
-// textActor.SetMapper(textMapper)
-// textActor.SetScale(0.2, 0.2, 0.2)
-// textActor.AddPosition(1, 0, 0)
-
-
-    // // Copy original points and point data
-    // output->CopyStructure( input );
-    // output->GetPointData()->PassData(input->GetPointData());
-    // output->GetCellData()->PassData(input->GetCellData());
 
     append->Update();
     output->ShallowCopy(append->GetOutput());
