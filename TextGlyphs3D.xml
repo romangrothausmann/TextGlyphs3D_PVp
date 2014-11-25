@@ -1,0 +1,33 @@
+<ServerManagerConfiguration>
+  
+  <ProxyGroup name="filters">
+    <SourceProxy name="TextGlyphs3D"
+                 class="TextGlyphs3D"
+                 label="Text Glyphs 3D">
+      
+      <InputProperty command="SetInputConnection" name="Input">
+        <DataTypeDomain name="input_type">
+          <DataType value="vtkPolyData" />
+        </DataTypeDomain>
+        <Documentation>This property specifies the input image data.
+        </Documentation>
+      </InputProperty>
+      
+      <StringVectorProperty name="YourStringVariable"
+			    command="SetTextArrayName"
+			    number_of_elements="1"
+			    default_values="hkl-label">
+      </StringVectorProperty>
+
+      <DoubleVectorProperty name="TextScale"
+                            command="SetScale"
+                            number_of_elements="1"
+                            default_values="1">
+        <DoubleRangeDomain name="range" />
+      </DoubleVectorProperty>
+
+    </SourceProxy>
+    
+  </ProxyGroup>
+  
+</ServerManagerConfiguration>

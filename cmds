@@ -1,0 +1,3 @@
+
+grothama@iana0:~/vtk/paraview_plugins/TextGlyphs3D/build$ 
+make && vglrun /opt/paraview-4.1.0_debug/bin/paraview --state=/net/home/grothama/vtk/paraview_plugins/TextGlyphs3D/test/test_04.pvsm 
