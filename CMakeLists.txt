@@ -9,3 +9,9 @@ ADD_PARAVIEW_PLUGIN(TextGlyphs3D "1.0"
    SERVER_MANAGER_SOURCES TextGlyphs3D.cxx
    SERVER_MANAGER_XML TextGlyphs3D.xml)
 
+
+ADD_PARAVIEW_PLUGIN(Representation "1.0"
+  SERVER_MANAGER_XML Representation.xml
+  SERVER_MANAGER_SOURCES
+    vtkMySpecialPolyDataMapper.cxx
+    vtkMySpecialRepresentation.cxx)
