@@ -14,49 +14,46 @@
 =========================================================================*/
 #include "vtkMySpecialRepresentation.h"
 
-#include "vtkMySpecialPolyDataMapper.h"
 #include "vtkObjectFactory.h"
-#include "vtkPVUpdateSuppressor.h"
-#include "vtkTextureMapToPlane.h"
-#include "vtkPNGReader.h"
-#include "vtkTexture.h"
 #include "vtkPVLODActor.h"
-#include "vtkImageData.h"
+
+#include "TextGlyphs3D.h"
+#include <vtkFollower.h>
 
 vtkStandardNewMacro(vtkMySpecialRepresentation);
 //----------------------------------------------------------------------------
-vtkMySpecialRepresentation::vtkMySpecialRepresentation()
-{
-  // Replace the mappers created by the superclass.
-  this->Mapper->Delete();
-  this->LODMapper->Delete();
+vtkMySpecialRepresentation::vtkMySpecialRepresentation(){
 
-  this->Mapper = vtkMySpecialPolyDataMapper::New();
-  this->LODMapper = vtkMySpecialPolyDataMapper::New();
 
-  this->TextureMapToPlane = vtkTextureMapToPlane::New();
+    this->Mapper->SetInputConnection(TextGlyphs3D...);
+    // this->Actor->Delete();
 
-  // Since we replaced the mappers, we need to call SetupDefaults() to ensure
-  // the pipelines are setup correctly.
-  this->SetupDefaults();
+    // this->Actor = vtkFollower::New();
+    // this->Actor->SetCamera(this->Renderer->GetActiveCamera());
 
-  this->TextureMapToPlane->SetInputConnection(this->UpdateSuppressor->GetOutputPort());
-  this->Mapper->SetInputConnection(this->TextureMapToPlane->GetOutputPort());
+    // this->SetupDefaults();
+    }
 
-  vtkPNGReader* reader = vtkPNGReader::New();
-  reader->SetFileName("/tmp/Screenshot.png");
-  vtkTexture* tex = vtkTexture::New();
-  tex->SetInputData(reader->GetOutput());
-  reader->Delete();
+//----------------------------------------------------------------------------
+virtual bool vtkMySpecialRepresentation::AddToView(vtkView *view){
 
-  this->Actor->SetTexture(tex);
-  tex->Delete();
-}
+    vtkPVRenderView* rview = vtkPVRenderView::SafeDownCast(view);
+    if (rview){
+	//vtkActor follower= vtkFollower::New();
+	vtkPVLODActor follower= vtkFollower::New();
+	follower->SetCamera(rview->GetRenderer()->GetActiveCamera());
+
+	this->Actor->Delete();
+	this->Actor= follower;
+	rview->GetRenderer()->AddActor(follower);
+	}
+    return this->Superclass::AddToView(view);
+    }	
 
 //----------------------------------------------------------------------------
 vtkMySpecialRepresentation::~vtkMySpecialRepresentation()
 {
-  this->TextureMapToPlane->Delete();
+//this->TextureMapToPlane->Delete();
 }
 
 //----------------------------------------------------------------------------

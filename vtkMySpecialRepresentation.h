@@ -19,15 +19,13 @@
 #ifndef __vtkMySpecialRepresentation_h
 #define __vtkMySpecialRepresentation_h
 
-#include "vtkGeometryRepresentationWithFaces.h"
+#include "vtkGeometryRepresentation.h"
 
-class vtkTextureMapToPlane;
-
-class VTK_EXPORT vtkMySpecialRepresentation : public vtkGeometryRepresentationWithFaces
+class VTK_EXPORT vtkMySpecialRepresentation : public vtkGeometryRepresentation
 {
 public:
   static vtkMySpecialRepresentation* New();
-  vtkTypeMacro(vtkMySpecialRepresentation, vtkGeometryRepresentationWithFaces);
+  vtkTypeMacro(vtkMySpecialRepresentation, vtkGeometryRepresentation);
   void PrintSelf(ostream& os, vtkIndent indent);
 
 //BTX
@@ -35,7 +33,8 @@ protected:
   vtkMySpecialRepresentation();
   ~vtkMySpecialRepresentation();
 
-  vtkTextureMapToPlane* TextureMapToPlane;
+  virtual bool AddToView(vtkView* view);
+
 private:
   vtkMySpecialRepresentation(const vtkMySpecialRepresentation&); // Not implemented
   void operator=(const vtkMySpecialRepresentation&); // Not implemented
