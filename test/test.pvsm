@@ -3145,11 +3145,11 @@
     </Proxy>
     <Proxy group="sources" type="CSVReader" id="3712" servers="1">
       <Property name="FileName" id="3712.FileName" number_of_elements="1">
-        <Element index="0" value="/net/home/grothama/vtk/paraview_plugins/TextGlyphs3D/test/hkl.lst.fdatss.csv"/>
+        <Element index="0" value="test/hkl.lst.fdatss.csv"/>
         <Domain name="files" id="3712.FileName.files"/>
       </Property>
       <Property name="FileNameInfo" id="3712.FileNameInfo" number_of_elements="1">
-        <Element index="0" value="/net/home/grothama/vtk/paraview_plugins/TextGlyphs3D/test/hkl.lst.fdatss.csv"/>
+        <Element index="0" value="test/hkl.lst.fdatss.csv"/>
       </Property>
       <Property name="TimestepValues" id="3712.TimestepValues"/>
       <Property name="DetectNumericColumns" id="3712.DetectNumericColumns" number_of_elements="1">
